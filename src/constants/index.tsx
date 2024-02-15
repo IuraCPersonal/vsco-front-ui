@@ -1,4 +1,11 @@
-import { GiCompass, GiDiamondHard, GiStabbedNote } from "react-icons/gi";
+import { GoHome, GoPlusCircle } from "react-icons/go";
+
+export const sidebar_links = [
+  { id: 1, text: "Dashboard", path: "/profile", icon: <GoHome /> },
+  { id: 2, text: "Add Product", path: "new-product", icon: <GoPlusCircle /> },
+  // { id: 3, text: "add job", path: "add-job", icon: <FaWpforms /> },
+  // { id: 4, text: "profile", path: "profile", icon: <ImProfile /> },
+];
 
 export const links = [
   {
@@ -9,12 +16,17 @@ export const links = [
   {
     id: 2,
     text: "shop",
-    url: "/protected",
+    url: "/shop",
   },
   {
     id: 3,
     text: "reviews",
     url: "/reviews",
+  },
+  {
+    id: 4,
+    text: "about",
+    url: "/about",
   },
 ];
 
@@ -40,7 +52,7 @@ export const TOGGLE_CART_ITEM_AMOUNT = "TOGGLE_CART_ITEM_AMOUNT";
 export const CLEAR_CART = "CLEAR_CART";
 export const COUNT_CART_TOTALS = "COUNT_CART_TOTALS";
 
-export const URL = "https://course-api.com/react-store-products";
+export const URL = "http://localhost:3000/products";
 
 export type Action<TPayload> = {
   type: string;

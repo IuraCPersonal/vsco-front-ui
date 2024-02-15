@@ -1,14 +1,28 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
+import {
+  Authentication,
+  Shop,
+  Home,
+  Reviews,
+  AuthAction,
+  LogoutAction,
+  Product,
+  productDetailLoader,
+  Profile,
+  AddProduct,
+  Cart,
+} from "./views";
+
 import { Layout as MainLayout } from "./layouts/main";
+import { checkAuthLoader, tokenLoader } from "./utils/auth";
+import { manipulateProductAction } from "./components";
 
-import { Authentication, Protected, Home, Reviews, AuthAction } from "./views";
-import AuthProvider from "./contexts/auth";
-import { checkAuthLoader } from "./utils/auth";
-
-let router = createBrowserRouter([
+export let routes = [
   {
     path: "/",
+    id: "root",
+    loader: tokenLoader,
     Component: MainLayout,
     children: [
       {
@@ -16,14 +30,55 @@ let router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: "/auth",
-        Component: Authentication,
-        action: AuthAction,
+        path: "profile",
+        loader: checkAuthLoader,
+        Component: Profile,
+        children: [
+          {
+            index: true,
+            element: <h1>Profile Page</h1>,
+          },
+          {
+            path: "new-product",
+            Component: AddProduct,
+            action: manipulateProductAction,
+          },
+        ],
       },
       {
-        path: "/protected",
-        element: <Protected />,
+        path: "cart",
         loader: checkAuthLoader,
+        children: [
+          {
+            index: true,
+            Component: Cart,
+          },
+        ],
+      },
+      {
+        path: "logout",
+        action: LogoutAction,
+      },
+      {
+        path: "shop",
+        loader: checkAuthLoader,
+        children: [
+          {
+            index: true,
+            element: <Shop />,
+          },
+          {
+            path: ":productId",
+            id: "product-detail",
+            loader: productDetailLoader,
+            children: [
+              {
+                index: true,
+                element: <Product />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: "/reviews",
@@ -31,18 +86,21 @@ let router = createBrowserRouter([
       },
     ],
   },
-]);
+  {
+    path: "/auth",
+    Component: Authentication,
+    action: AuthAction,
+  },
+];
+
+const router = createBrowserRouter(routes);
 
 if (import.meta.hot) {
   import.meta.hot.dispose(() => router.dispose());
 }
 
 function App() {
-  return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

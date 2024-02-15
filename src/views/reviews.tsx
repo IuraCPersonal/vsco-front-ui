@@ -1,5 +1,11 @@
+import { Breadcrumb } from "../components";
+
 const Reviews: React.FC = () => {
-  return <h1>Reviews Page</h1>;
+  return (
+    <>
+      <Breadcrumb title="Reviews" />
+    </>
+  );
 };
 
 export default Reviews;

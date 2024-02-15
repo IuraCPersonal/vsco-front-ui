@@ -7,7 +7,7 @@ const Authentication: React.FC = () => {
 
 export default Authentication;
 
-export const action = async ({ request }) => {
+export const action = async ({ request }: any) => {
   const searchParams = new URL(request.url).searchParams;
   const mode = searchParams.get("mode") || "login";
 
@@ -17,6 +17,7 @@ export const action = async ({ request }) => {
 
   const data = await request.formData();
   const authData = {
+    name: data.get("name"),
     username: data.get("email"),
     password: data.get("password"),
   };
@@ -29,7 +30,7 @@ export const action = async ({ request }) => {
     body: JSON.stringify(authData),
   });
 
-  if (response.status === 422 || response.status === 401) {
+  if (response.status === 400 || response.status === 401) {
     return response;
   }
 
